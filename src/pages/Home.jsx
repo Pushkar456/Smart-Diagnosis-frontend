@@ -17,30 +17,47 @@ export default function Home() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async () => {
-    setLoading(true);
-    setError("");
-    setResult(null);
+ const handleSubmit = async () => {
+  setLoading(true);
+  setError("");
+  setResult(null);
 
-    try {
-      const res = await diagnosePatient(form);
+  try {
+    const res = await diagnosePatient(form);
 
-      if (!res || !res.success) {
-        throw new Error("Invalid response");
-      }
-
-      const cleaned = JSON.parse(
-        res.diagnosis.raw.replace(/```json|```/g, "")
-      );
-
-      setResult(cleaned);
-    } catch (err) {
-      console.error(err);
-      setError("⚠️ Server error. Please wait a moment and try again.");
-    } finally {
-      setLoading(false);
+    if (!res || !res.success) {
+      throw new Error("Invalid response");
     }
-  };
+
+    let data;
+
+    // ✅ Case 1: Already parsed JSON (BEST case)
+    if (res.diagnosis.possible_conditions) {
+      data = res.diagnosis;
+    } 
+    // ✅ Case 2: Raw string (fallback)
+    else if (res.diagnosis.raw) {
+      const clean = res.diagnosis.raw
+        .replace(/```json\s*/i, "")
+        .replace(/```/g, "")
+        .trim();
+
+      data = JSON.parse(clean);
+    } 
+    // ❌ Invalid response
+    else {
+      throw new Error("Invalid diagnosis format");
+    }
+
+    setResult(data);
+
+  } catch (err) {
+    console.error(err);
+    setError("⚠️ Server error. Please wait and try again.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div style={styles.container}>

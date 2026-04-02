@@ -4,8 +4,11 @@ export default function Navbar() {
   return (
     <div style={styles.nav}>
       <div style={styles.logo}>🩺 SmartDiag</div>
+      <div>
+
        <Link to="/" style={styles.link}>Home</Link>
       <Link to="/history" style={styles.link}>History</Link>
+      </div>
     </div>
   );
 }
@@ -19,5 +22,5 @@ const styles = {
     color: "white",
   },
   logo: { fontSize: "20px", fontWeight: "bold" },
-  link: { color: "white", textDecoration: "none" },
+  link: { color: "white", textDecoration: "none",marginRight:"30px" },
 };
