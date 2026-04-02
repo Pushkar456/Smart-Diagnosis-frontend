@@ -1,5 +1,3 @@
-// export const API_BASE = "http://localhost:3000"; // change if needed
-
 export const diagnosePatient = async (data) => {
   console.log("api url",process.env.REACT_APP_API_URL)
   const res = await fetch(`${process.env.REACT_APP_API_URL}api/diagnose`, {
@@ -11,7 +9,7 @@ export const diagnosePatient = async (data) => {
 };
 
 export const getHistory = async () => {
-  // console.log("api url",`${process.env.REACT_APP_API_URL}/api/history`)
+  console.log("api url",`${process.env.REACT_APP_API_URL}/api/history`)
   const res = await fetch(`${process.env.REACT_APP_API_URL}api/history`);
   return res.json();
 };
